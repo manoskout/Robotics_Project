@@ -31,7 +31,7 @@ class ControlMoving():
         
         #moving params
         self.moving_type = UInt8()
-        self.moving_angluar = 0.0
+        self.moving_angular = 0.0
         self.moving_linear = 0.0
         self.moving_msg = MovingParam()
 
@@ -72,10 +72,10 @@ class ControlMoving():
 
     def get_param(self, msg):
         self.moving_type = msg.moving_type
-        self.moving_angluar = msg.moving_value_angular
+        self.moving_angular = msg.moving_value_angular
         self.moving_linear = msg.moving_value_linear
         rospy.loginfo("get : moving_type : %d",self.moving_type)
-        rospy.loginfo("get : moving_angluar : %f",self.moving_angluar)
+        rospy.loginfo("get : moving_angular : %f",self.moving_angular)
         rospy.loginfo("get : moving_linear : %f", self.moving_linear)
 
         if self.is_step_left == True:
