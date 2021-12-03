@@ -72,7 +72,11 @@ camera matrix =
 $$ 
 <!--  -->
 #### Extrinsic camera calibration  
-*image_projection* node used for this purpose. After the projection, on the grounds that there is a distortion, *image_compensation* node handle this using histogram equalization to improve the quality of the projected image.  
+Extrinsic camera calibration defines a location and orientation of the camera with respect to the world frame. Similarly, we could state that they corresponds to rotation and translation vectors which translates a coordinates of a 3D point to a coordinate system.
+
+**Image Projection** gets 4 coordinates of the image in order to get the projection according to these coordinates. 
+<!-- TODO : Take a screenshot from the lab and add it as an example HERE -->
+*image_compensation* node handle this using histogram equalization to improve the quality of the projected image.  
 
 
 # Original Content
