@@ -18,7 +18,7 @@ For the project, the mobile robot used is a Turtlebot3 Burger. The Turtlebot3 is
 Our goal is to complete the following scenario:
 
 1. **Camera Calibraton** is a crusial step for the fisheye camera which is integrated to Turtlebot3. The implementation uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package from ROS. This packages uses OpenCV camera calibration, fully described [here](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html). For this step we only have to use the checkerboard in order to get all the related coefficients for the undistortion.
-![Checkerboard](img/checkerboard.jpg)
+
 2. **Lane detection** is the keystone for the robot in order to be able to move according to the lines. In the race map that we used, the inner line is the yellow line and the outter line is the white one. To make the robot able to work we followed a "lane detection" calibration in which we set the most reliabe parameters of Hue Saturation and Value (HSV) to make the robot able to identify the `yellow` and `white` lines.
 3. **Traffic Lights** is the last phase of the project. More specifically the turtlebot should be able to recognize 3 differert colors in order to get the right decision. Similarly, like the Lane Detection calibration, we adjust the aforementioned parameters for the `yellow`, `red` and `green` colours respectively.
 # Repository Content
@@ -32,9 +32,11 @@ In this section, we briefly describe the packages and their dependencies that us
 ### **Step 1: Calibration**
 This step is based on camera calibration in order to set the extrinsic and intrinsic calibration. All the calibration steps are integrated into nodes. Also it contains a node which calls the `raspicam_node` which used in order to publish the camera frames. We will discuss below how it works.
 #### **Camera calibration**
-Camera calibration is an integral part of this project. For this phase, the project uses the `camera_package` which allows easy calibration of monocular cameras using a checkerboard calibration target. 
+Camera calibration is an integral part of this project. For this phase, the project uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package which allows easy calibration of monocular cameras using a checkerboard calibration target. The packagess uses OpenCV library which contains the camera calibration method. 
+<p align="center"><img src="img/checkerboard.png" alt="checkerboard" width="300"/></p>  
+
 #### **Intrinsic calibration**  
-It uses the `camera_calibration` package. This package allows easy calibration of monocular or stero cameras. For this reason, we used the checkboard in order to fix the *Radial Distortion* of the acquired image. *Radial or Barrel Distortion* can be presented as:
+As we aforementioned, it uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package. This package allows easy calibration of monocular or stero cameras. The checkerboard was the tool in order to fix the *Radial Distortion* of the acquired image. *Radial or Barrel Distortion* can be presented as:
 
 <p align="center"><img src="https://render.githubusercontent.com/render/math?math=\begin{aligned}x_{distorted}=x(1%2Bk_{1}r^2%2Bk_{2}r^4%2Bk_{3}r^6)\end{aligned}"></p>
 
@@ -57,12 +59,14 @@ Furthermore, **intrinsic parameters** allows a mapping between camera coordinate
 <p align="center"><img src="https://render.githubusercontent.com/render/math?math=%5Cbegin%7Baligned%7D%0Acamera%20matrix%20%3D%0A%5Cbegin%7Bbmatrix%7D%0A%20%20%20f_%7Bx%7D%20%26%200%20%26%20C_%7Bx%7D%5C%5C%0A%20%20%200%20%26%20f_%7By%7D%20%26%20C_%7By%7D%5C%5C%0A%20%20%200%20%26%200%20%26%201%20%0A%5Cend%7Bbmatrix%7D%20%0A%5Cend%7Baligned%7D%0A"></p>
   
 <!--  -->
-#### Extrinsic calibration  
-Extrinsic camera calibration defines a location and orientation of the camera with respect to the world frame. Similarly, we could state that they corresponds to rotation and translation vectors which translates a coordinates of a 3D point to a coordinate system.
+#### **Extrinsic calibration**  
+It deemed as the second phase of the first stem. Extrinsic calibration defines a location and orientation of the camera with respect to the world frame. Similarly, we could state that they corresponds to rotation and translation vectors which translates a coordinates of a 3D point to a coordinate system. 
 
-**Image Projection** gets 4 coordinates of the image in order to get the projection according to these coordinates. 
+**Image Projection** gets 4 coordinates of the acquired image in order to get the projection according to these coordinates. The image projection established using homography tranformation. Homography is a transformation that is occuring between two planes. To put it briefly, it is mapping between two planar projection of an image. It is represented by 3x3 transformation matring in a homogenous coordinates space. Mathematically the homography is represented as:
+<p align="center"><img src="images/../img/homogeneous.png"/></p>   
 <!-- TODO : Take a screenshot from the lab and add it as an example HERE -->
-*image_compensation* node handle this using histogram equalization to improve the quality of the projected image.  
+
+**Image Compensation** handle this using histogram equalization to improve the quality (brightness & contrast) of the groun-projected image.  
 
 ### **Step 2: Lane Detection**
 As we already mentioned there are one yellow line on the right border of the lane and a white line on the left border of the lane. The desired robot's position is the center between those lines. In this step we are going to estimate this center point of the desired position.
