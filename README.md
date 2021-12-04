@@ -65,6 +65,13 @@ Extrinsic camera calibration defines a location and orientation of the camera wi
 *image_compensation* node handle this using histogram equalization to improve the quality of the projected image.  
 
 ### **Step 2: Lane Detection**
+As we already mentioned there are one yellow line on the right border of the lane and a white line on the left border of the lane. The desired robot's position is the center between those lines. In this step we are going to estimate this center point of the desired position.
+
+On the previous step we set the lightness, saturation and hue parameters for each color mask (white, yellow). Now we are going to use those threshold values with a "bitwise AND operation" in order to create masks that will filter out our image and detect the border lines. 
+
+For each line, the algorithm is going to count how many pixels there are in the range of the specified color (if any) and adjust the reliability of the line. Reliability, is like a measurement of how much "recognized" is the line. For example, if the line is short or not recognised the reliability should be small and the robot should follow the other line. On the other hand if the reliability is high the robot should count on this line.
+
+The best scenario is when both of the lines are highly recognizable, concluding to high reliability, so that the algorithm is counting on both of lines. Finally, we estimate a center point between the lines, representing the robot's desired position. 
 
 # Original Content
 In this section, we will describe the original content we had the access in the project.
