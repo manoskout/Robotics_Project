@@ -58,15 +58,16 @@ Furthermore, **intrinsic parameters** allows a mapping between camera coordinate
 
 <p align="center"><img src="https://render.githubusercontent.com/render/math?math=%5Cbegin%7Baligned%7D%0Acamera%20matrix%20%3D%0A%5Cbegin%7Bbmatrix%7D%0A%20%20%20f_%7Bx%7D%20%26%200%20%26%20C_%7Bx%7D%5C%5C%0A%20%20%200%20%26%20f_%7By%7D%20%26%20C_%7By%7D%5C%5C%0A%20%20%200%20%26%200%20%26%201%20%0A%5Cend%7Bbmatrix%7D%20%0A%5Cend%7Baligned%7D%0A"></p>
   
-<!--  -->
 #### **Extrinsic calibration**  
 It deemed as the second phase of the first stem. Extrinsic calibration defines a location and orientation of the camera with respect to the world frame. Similarly, we could state that they corresponds to rotation and translation vectors which translates a coordinates of a 3D point to a coordinate system. 
 
 **Image Projection** gets 4 coordinates of the acquired image in order to get the projection according to these coordinates. The image projection established using homography tranformation. Homography is a transformation that is occuring between two planes. To put it briefly, it is mapping between two planar projection of an image. It is represented by 3x3 transformation matring in a homogenous coordinates space. Mathematically the homography is represented as:
-<p align="center"><img src="images/../img/homogeneous.png"/></p>   
+<p align="center"><img src="images/../img/homogeneous.png"/></p>  
+
+According to the above, in the proposed method, we set a calibration step in order to get the right coordinates to project the road containing both the yellow and white line. For this reason, we set specific top and botton corners. Then, the program add Gaussian Blur to the image. Nextly, we perform the homography transform process having the corner's coordinates. `cv2.findHomography()` is a OpenCv function that used for this reason, the documentation of this function is [here](https://www.google.com). Having the 3x3 matrix from `findHomography()` function we use the `cv2.warpPerspective()` function to get the projected image. Due to the fact that the image is projected and there is a distortion, black triangles filled these spaces on the bottom corners of the projected image.
 <!-- TODO : Take a screenshot from the lab and add it as an example HERE -->
 
-**Image Compensation** handle this using histogram equalization to improve the quality (brightness & contrast) of the groun-projected image.  
+**Image Compensation** handle this using histogram equalization to improve the quality (brightness & contrast) of the groun-projected image. The histogram equalization used because of the distortion and the integration of Gaussian blur in the image. This nodes just get the projected image via the topic that the image message published. Then converts the image to a grayscale because it computationally efficient to perform histogram equalization. Lastly, using the `cv2.convertScaleAbs()` function from OpenCV, it scales, calculates absolute values and converts the result to 8-bit. To put it differently, the aforementioned function used to update the compensated image from the equalized one.
 
 ### **Step 2: Lane Detection**
 As we already mentioned there are one yellow line on the right border of the lane and a white line on the left border of the lane. The desired robot's position is the center between those lines. In this step we are going to estimate this center point of the desired position.
