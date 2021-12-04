@@ -52,7 +52,7 @@ According to the equation above, we can find the five paremeters, known as disto
 
 Furthermore, **intrinsic parameters** allows a mapping between camera coordinates and pixel coordinates in the image frame. They include information like local length <img src="https://render.githubusercontent.com/render/math?math=(f_{x},f_{y})">, and optical center <img src="https://render.githubusercontent.com/render/math?math=(C_{x}, C_{y})">. This parameters can be expressed in camera matrix:
 
-<img src="https://render.githubusercontent.com/render/math?math=cameramatrix=\begin{bmatrix}f_{x} & 0 & C_{x} \\ 0 & f_{y} & C_{y} \\ 0 & 0 & 1 \\ \end{bmatrix}">
+<img src="[https://render.githubusercontent.com/render/math?math=cameramatrix=\begin{bmatrix}f_{x} & 0 & C_{x} \\ 0 & f_{y} & C_{y} \\ 0 & 0 & 1 \\ \end{bmatrix}](https://render.githubusercontent.com/render/math?math=%5Cbegin%7Baligned%7D%0Acamera%20matrix%20%3D%0A%5Cbegin%7Bbmatrix%7D%0A%20%20%20f_%7Bx%7D%20%26%200%20%26%20C_%7Bx%7D%5C%5C%0A%20%20%200%20%26%20f_%7By%7D%20%26%20C_%7By%7D%5C%5C%0A%20%20%200%20%26%200%20%26%201%20%0A%5Cend%7Bbmatrix%7D%20%0A%5Cend%7Baligned%7D%0A)">
   
 <!--  -->
 #### Extrinsic camera calibration  
