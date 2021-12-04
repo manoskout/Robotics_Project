@@ -19,8 +19,9 @@ Our goal is to complete the following scenario:
 
 1. **Camera Calibraton** is a crusial step for the fisheye camera which is integrated to Turtlebot3. The implementation uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package from ROS. This packages uses OpenCV camera calibration, fully described [here](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html). For this step we only have to use the checkerboard in order to get all the related coefficients for the undistortion.
 
-2. **Lane detection** is the keystone for the robot in order to be able to move according to the lines. In the race map that we used, the inner line is the yellow line and the outter line is the white one. To make the robot able to work we followed a "lane detection" calibration in which we set the most reliabe parameters of Hue Saturation and Value (HSV) to make the robot able to identify the `yellow` and `white` lines.
-3. **Traffic Lights** is the last phase of the project. More specifically the turtlebot should be able to recognize 3 differert colors in order to get the right decision. Similarly, like the Lane Detection calibration, we adjust the aforementioned parameters for the `yellow`, `red` and `green` colours respectively.
+2. **Lane detection** is a keystone for the robot in order to be able to move according to the lines. In the race map that we used, the inner line is the yellow line and the outter line is the white one. To make the robot able to work we followed a "lane detection" calibration in which we set the most reliabe parameters of Hue Saturation and Value (HSV) to make the robot able to identify the `yellow` and `white` lines.
+3. **Lane Following** is the last phase in which we implement the PD controller. The trajectory of the robot is performed according to both PD controller and the detected lane.
+<!-- 3. **Traffic Lights** is the last phase of the project. More specifically the turtlebot should be able to recognize 3 differert colors in order to get the right decision. Similarly, like the Lane Detection calibration, we adjust the aforementioned parameters for the `yellow`, `red` and `green` colours respectively. -->
 # Repository Content
 ## Original Code links
 The original code of this project is based on the tutorial of [Turtlebot_Autorace2020](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/#turtlebot3-autorace-2020).
@@ -107,40 +108,10 @@ angular.z = -max(angular_z, -2.0) if angular_z < 0 else -min(angular_z, 2.0)
 
 Finally, we publish the velocities to the robot using the `cmd_vel` topic.
 
-# Original Content
-In this section, we will describe the original content we had the access in the project.
+# Instruction to run the turtlebot  
+In this section, there is an fully explained instruction of how to perform calibration ,and then 
+## Calibration 
 <!-- 
-### Setup Material
-
-### Packages
-
-### Basic Commands
-
-### Project's implementation
-
-#### ROS Navigation
-
-#### Move robot
-
-#### Lane Detection
-
-# Instruction to run the project
-
-## Download and install 
-
-## Building 
-
-## Commands
-
-# Result 
-
-Show the nodes that are created for this project 
-
-# Problems encountered
-
-### On the turtlebot
-
-### On the remote PC
 
 # Conclusion
 
