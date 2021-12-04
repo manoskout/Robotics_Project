@@ -80,22 +80,30 @@ The best scenario is when both of the lines are highly recognizable, concluding 
 
 ### **Step 3: Lane Following**
 The controller of the robot is receiving the desired center position of the robot and converts it to error variable:  
-`error = center - 500`  
+```python
+error = center - 500
+```  
 
 The angular velocity is being adjusted by the controller while the linear velocity is constant:  
-`linear_x = 0.05`  
+```python
+linear_x = 0.05
+```  
 
 This error variable, multiplied by some constants, is used to feed the PD (Proportional-Derivative) Controller angular velocity:  
-`Kp = 0.0025`  
-`Kd = 0.007`  
-`angular_z = Kp * error + Kd * (error - self.lastError)`  
+```python
+Kp = 0.0025
+Kd = 0.007
+angular_z = Kp * error + Kd * (error - self.lastError)
+```  
 
 The error is being multiplied by Kp, added with the substraction of the current error from the previous error multiplied by Kd. 
 
 This approach is a very easy implementation of the PD Controller.
 
 The last important checkpoint before publishing the values to the robot, is that every robot has some minimum and maximum motor velocity. For this reason we are going to limit the angular velocity between -2.0 to 2.0:  
-`angular.z = -max(angular_z, -2.0) if angular_z < 0 else -min(angular_z, 2.0)` 
+```python
+angular.z = -max(angular_z, -2.0) if angular_z < 0 else -min(angular_z, 2.0)
+```
 
 Finally, we publish the velocities to the robot using the `cmd_vel` topic.
 
