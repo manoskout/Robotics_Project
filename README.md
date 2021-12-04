@@ -33,52 +33,27 @@ In this section, we briefly describe the packages and their dependencies that us
 This package used for both extrinsic and intrinsic camera calibration. All the calibration steps are integrated into nodes. Also it contains a node which calls the `raspicam_node` which used in order to publish the camera frames. We will discuss below how it works.
 #### Intrinsic camera calibration  
 It uses the `camera_calibration` package. This package allows easy calibration of monocular or stero cameras. For this reason, we used the checkboard in order to fix the *Radial Distortion* of the acquired image. *Radial or Barrel Distortion* can be presented as:
-```math
 
-\begin{aligned}
-x_{distorted}=x(1+k_{1}r^2+k_{2}r^4+k_{3}r^6)   
-\end{aligned}
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned}x_{distorted}=x(1+k_{1}r^2+k_{2}r^4+k_{3}r^6)\end{aligned}">
 
-```  
-```math  
-$$
-\begin{aligned}
-y_{distorted}=y(1+k_{1}r^2+k_{2}r^4+k_{3}r^6)
-\end{aligned}
-$$
-``` 
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned}y_{distorted}=y(1+k_{1}r^2+k_{2}r^4+k_{3}r^6)\end{aligned}">
+
+
 In the same manner, tangenial distortion occurs because the imaging-taking lense is not aligned perfectly parallel to the imaging plane. So, some images look nearer than expexted. The amount of tangenial distortion can be presented as below:  
-```math
-$$
-\begin{aligned}
-x_{distorted}=x+[2*p_{1}xy+p_{2}(r^2+2x^2)]   
-\end{aligned}
-$$  
-$$
-\begin{aligned}
-y_{distorted}=y+[p_{1}(r^2+2x^2)+2*p_{2}xy]  
-\end{aligned}
-$$
-```  
+
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned}x_{distorted}=x+[2*p_{1}xy+p_{2}(r^2+2x^2)]\end{aligned}">
+
+<img src="https://render.githubusercontent.com/render/math?math=\begin{aligned}y_{distorted}=y+[p_{1}(r^2+2x^2)+2*p_{2}xy]\end{aligned}">
+
 According to the equation above, we can find the five paremeters, known as distortion coefficients
-```math
-$$
-DistortionCoefficients=(k_{1},k_{2},p_{1},p_{2},k_{3})
-$$
-```  
-Furthermore, **intrinsic parameters** allows a mapping between camera coordinates and pixel coordinates in the image frame. They include information like local length $(f_{x},f_{y})$, and optical center $(C_{x}, C_{y})$. This parameters can be expressed in camera matrix:
-```math
-$$
-\begin{aligned}
-camera matrix =
-\begin{bmatrix}
-   f_{x} & 0 & C_{x}\\
-   0 & f_{y} & C_{y}\\
-   0 & 0 & 1 
-\end{bmatrix} 
-\end{aligned}
-$$ 
-```  
+
+
+<img src="https://render.githubusercontent.com/render/math?math=DistortionCoefficients=(k_{1},k_{2},p_{1},p_{2},k_{3})">
+
+Furthermore, **intrinsic parameters** allows a mapping between camera coordinates and pixel coordinates in the image frame. They include information like local length <img src="https://render.githubusercontent.com/render/math?math=(f_{x},f_{y})">, and optical center <img src="https://render.githubusercontent.com/render/math?math=(C_{x}, C_{y})">. This parameters can be expressed in camera matrix:
+
+<img src="https://render.githubusercontent.com/render/math?math=cameramatrix=\begin{bmatrix}f_{x} & 0 & C_{x} \\ 0 & f_{y} & C_{y} \\ 0 & 0 & 1 \\ \end{bmatrix}">
+  
 <!--  -->
 #### Extrinsic camera calibration  
 Extrinsic camera calibration defines a location and orientation of the camera with respect to the world frame. Similarly, we could state that they corresponds to rotation and translation vectors which translates a coordinates of a 3D point to a coordinate system.
