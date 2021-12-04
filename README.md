@@ -34,11 +34,11 @@ This package used for both extrinsic and intrinsic camera calibration. All the c
 #### Intrinsic camera calibration  
 It uses the `camera_calibration` package. This package allows easy calibration of monocular or stero cameras. For this reason, we used the checkboard in order to fix the *Radial Distortion* of the acquired image. *Radial or Barrel Distortion* can be presented as:
 ```math
-$$
+
 \begin{aligned}
 x_{distorted}=x(1+k_{1}r^2+k_{2}r^4+k_{3}r^6)   
 \end{aligned}
-$$
+
 ```  
 ```math  
 $$
