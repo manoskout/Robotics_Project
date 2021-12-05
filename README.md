@@ -244,9 +244,28 @@ After that, in the shown dialog, there is a set of parameters called `detect_lan
 > **_Line Calibration_**: As [tutorial](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/) mentioned, is better to start by modifying the Hue to find the white and yellow color which have their own regions. Then, calibrate the low - high value of Saturation. Lastly, calibrate the lightness low - high value. In is worth noting that on the `detect_lane` node there is an auto-adjustment function, so calibrating lightness low value is meaningless.  
 5. After the colour calibration, go to the **lane.yaml** file and update the values that corresponds to a better line detection. The path of this file is on **/robotics_project/turlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_detect/param/lane**
 <!-- Add an image showing the dialog of this command -->
-6. Close both `rqt_reconfigure` and turtlebot3_autorace_detect_lane
+6. Close both `rqt_reconfigure` and `turtlebot3_autorace_detect_lane`
 
 ## Detect lane mission
+The commands below will perfom the lane detection mission. You can continue from the previous step or you should rerun the `roscore`, `raspberry pi cam`, and `intrinsic and extrinsic` calibration.
+1. Run this command on `Remote PC`:
+```bash
+export AUTO_DT_CALIB=action
+roslaunch turtlebot3_autorace_traffic_light_detect turtlebot3_autorace_detect_lane.launch
+```
+>**_Note_:**The `AUTO_DT_CALIB` is also an environment variable which defines in which mode the `detect_lane` will be launched
+2. Execute the command that enable the velocity topic in the Turtlebot, called `/cmd_vel`.
+```bash
+roslaunch turtlebot3_bringup turtlebot3_robot.launch
+```  
+3. The step is related to the velocity manipulation through the PD controller which is integrated into the project. To perform this step, just execute the command below:
+```bash
+roslaunch turtlebot3_autorace_traffic_light_control turtlebot3_autorace_control_lane.launch
+```
+This launch file enables the `control_lane` node. It subscribe the `/detect/lane` topic which contains the `center`, setting robot between the yellow and the white line by updating the `/cmd_vel` topic which updates the linear and angular velocity of the Turtlebot.
+
+### **Results**
+<!-- Add a video related to the commands above -->
 
 <!-- 
 
