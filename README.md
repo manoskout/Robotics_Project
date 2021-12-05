@@ -195,6 +195,58 @@ rosrun rqt_reconfigure rqt_reconfigure
      * **image_compensation_projected** has the `clip_hist_percent` which is a clip limit to limit the maximum slope in the transform function. More specifically, it limits the maximum number of ssamples per bin in each tile, and the clipped samples are then redistributed inniformly because the CDF must be normalized yo [0,1].
      * **image_projection** has 4 different parameters, one for each corner. 
      <!-- Add and image -->
+7. Lastly, you should go to the `/turtlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_camera/calibration/extrinsic_calibration/projection.yaml` and update the parameters that you modify. Also, in the same directory there is the `compensation.yaml` file and you can modify the `clip_hist_percent` if you have changed the value.
+<!-- Add an image -->
+### **Check Calibration**
+When you will have finished the camera calibration step according the the instruction above, You should follow the instructions below to check the results of you calibration.
+1. If you have closed the roscore, you should rerun it to establish communication between the turtlebot and the Remote PC. Hence, run the `roscore` command on `Remote PC`
+2. Similarly, the raspberry pi camera publisher should be enabled if you have disabled it. Run on `Turtlebot`
+```bash
+roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_camera_pi.launch
+```
+3. Run the instrinsic camera caliration launch file on `Remote PC`
+```bash
+export AUTO_IN_CALIB=action
+roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+```
+>**_Note_:** It should be noticed that in this bash block, we define the environment variable AUTO_IN_ACTION equals to action, which means that it will not follow the calibration phase, but it will set the updated parameters from the `yaml` file.  
+4. In the same manner, we will launch the extrinsic camera calibration on `Remote PC`
+```bash
+export AUTO_EX_CALIB=action
+roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_extrinsic_camera_calibration.launch
+```
+<!-- SHOW THE OUTPUT AFTER THIS COMMANDS -->
+### **Lane Detection Calibration**
+The next phase is related to detection of lines. As we clarified in the previous section, the lines will be a guidance of the Turtlebot. Thus, the camera should be well calibrated in how to identify both yellow and white lines. Before we start this step, you should be sure that the **yellow line is placed on the left side** of the robot and the **white line on the right side** respectively.
+1. You should rerun all the previous commands on the **Check Calibration** step which publishes the projected image.
+2. Then, you should also trigger the *lane detection* launch file on `Remote PC`:
+```bash
+export AUTO_DT_CALIB=calibration
+roslaunch turtlebot3_autorace_traffic_light_detect turtlebot3_autorace_detect_lane.launch
+```
+Similarly, here we used the `AUTO_DT_CALIB` which is responsible on what mode we will set the `detect_lane` node to execute a specific group of functions for calibration.
+3. Also for this step, we need to execute `rqt` on `Remote PC` to get the published messages of the detect_lane node. Then, in the rqt dialog we create *Image Views* by clicking **plugins>visualization>Image view**. There are three topics that this node publishes.
+   * **/detect/image_yellow_lane_marker/compressed** is a filtered image
+   * **/detect/image_white_lane_marker/compressed** is a filtered image
+   * **/detect/image_lane/compessed** is the output of the detected lines containing the center lane which is responsible for the robot's trajectory
+4. Execute the rqt_reconfigure on `Remote PC`
+```bash
+rosrun rqt_reconfigure rqt_reconfigure
+```
+After that, in the shown dialog, there is a set of parameters called `detect_lane`. This dialog contains HSV parameters related both for yellow and white lane. 
+<!-- Add an image showing the dialog of this command -->
+> **_Note_:** Due to the fact that physical environment interfere the line detection process, the line color filtering is difficult. The modified parameters will interact different throughout the day (because of the luminance)  
+>   
+> **_HSV-HSL explanation_:** 
+> * Hue (H): means the color, each color has its own region of the value, [here](https://en.wikipedia.org/wiki/HSL_and_HSV) are information about the color regions.  
+> * Saturation (S): means the ration of colorfulness to brightness  
+> * Value or Lightness (V or L): is the average of the largest and smallest color components.  
+> **_Line Calibration_**: As [tutorial](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/) mentioned, is better to start by modifying the Hue to find the white and yellow color which have their own regions. Then, calibrate the low - high value of Saturation. Lastly, calibrate the lightness low - high value. In is worth noting that on the `detect_lane` node there is an auto-adjustment function, so calibrating lightness low value is meaningless.  
+5. After the colour calibration, go to the **lane.yaml** file and update the values that corresponds to a better line detection. The path of this file is on **/robotics_project/turlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_detect/param/lane**
+<!-- Add an image showing the dialog of this command -->
+6. Close both `rqt_reconfigure` and turtlebot3_autorace_detect_lane
+
+## Detect lane mission
 
 <!-- 
 
