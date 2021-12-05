@@ -253,7 +253,7 @@ The commands below will perfom the lane detection mission. You can continue from
 export AUTO_DT_CALIB=action
 roslaunch turtlebot3_autorace_traffic_light_detect turtlebot3_autorace_detect_lane.launch
 ```
->**_Note_:**The `AUTO_DT_CALIB` is also an environment variable which defines in which mode the `detect_lane` will be launched
+> **_Note_:**The `AUTO_DT_CALIB` is also an environment variable which defines in which mode the `detect_lane` will be launched
 2. Execute the command that enable the velocity topic in the Turtlebot, called `/cmd_vel`.
 ```bash
 roslaunch turtlebot3_bringup turtlebot3_robot.launch
