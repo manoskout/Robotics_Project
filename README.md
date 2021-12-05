@@ -241,7 +241,7 @@ After that, in the shown dialog, there is a set of parameters called `detect_lan
 > * Hue (H): means the color, each color has its own region of the value, [here](https://en.wikipedia.org/wiki/HSL_and_HSV) are information about the color regions.  
 > * Saturation (S): means the ration of colorfulness to brightness  
 > * Value or Lightness (V or L): is the average of the largest and smallest color components.  
-> **_Line Calibration_**: As [tutorial](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/) mentioned, is better to start by modifying the Hue to find the white and yellow color which have their own regions. Then, calibrate the low - high value of Saturation. Lastly, calibrate the lightness low - high value. In is worth noting that on the `detect_lane` node there is an auto-adjustment function, so calibrating lightness low value is meaningless.  
+> **_Line Calibration_**: As the [tutorial](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/) mentioned, is better to start by modifying the Hue to find the white and yellow color which have their own regions. Then, calibrate the low - high value of Saturation. Lastly, calibrate the lightness low - high value. In is worth noting that on the `detect_lane` node there is an auto-adjustment function, so calibrating lightness low value is meaningless.  
 5. After the colour calibration, go to the **lane.yaml** file and update the values that corresponds to a better line detection. The path of this file is on **/robotics_project/turlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_detect/param/lane**
 <!-- Add an image showing the dialog of this command -->
 6. Close both `rqt_reconfigure` and `turtlebot3_autorace_detect_lane`
