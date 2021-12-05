@@ -151,7 +151,7 @@ export GAZEBO_MODE=false
 roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
 ```
 > **_Note:_** the `AUTO_IN_CALIB` is responsible for the mode that the instrinsic calibration launch file will be launched.
-This launch file will run the `camera_calibration` package if the mode is in calibration. Moving the checkerboard in front of the camera it will acquire all the patterns that it needs for all the axis. When it will get all the required patterns, you should click on the calibrate button. After a while, the **save** button will be enabled.
+This launch file will run the `camera_calibration` package if the mode is in calibration. Moving the checkerboard in front of the camera it will acquire all the patterns that it needs for all the axis. When it will get all the required patterns, you should click on the calibrate button. After a while, the **save** button will be enabled.  
 > **_Note:_** the output of the save button is **calibration.tar.gz** file, you should extract only the **ost.yaml** file which contains all the parameters that we need.
 4. Copy and paste the data from **ost.yaml** to **camerav2_320x240_30fps.yaml** which is located `/robotics_project/turtlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_camera/calibration/intrinsic_calibration
 
@@ -193,8 +193,9 @@ rosrun rqt_reconfigure rqt_reconfigure
 ```
    * The `image_projection` node which is into the `turtlebot3_autorace_extrinsic_camera_calibration.launch` file load all the parameters about the aforementioned coordinates from the `/calibration/extrinsic_calibration/projection.yaml`. In calibration mode, it reads the parameters from the `rqt_reconfigure` through the Dynamic Reconfigure. From the camera dropdown, select the `image_compensation_projected` and from the `image_mono`, select the `image_projection`.
      * **image_compensation_projected** has the `clip_hist_percent` which is a clip limit to limit the maximum slope in the transform function. More specifically, it limits the maximum number of ssamples per bin in each tile, and the clipped samples are then redistributed inniformly because the CDF must be normalized yo [0,1].
-     <!-- Add and image -->
      * **image_projection** has 4 different parameters, one for each corner. 
+     <!-- Add and image -->
+
 <!-- 
 
 # Conclusion
