@@ -109,8 +109,92 @@ angular.z = -max(angular_z, -2.0) if angular_z < 0 else -min(angular_z, 2.0)
 Finally, we publish the velocities to the robot using the `cmd_vel` topic.
 
 # Instruction to run the turtlebot  
-In this section, there is an fully explained instruction of how to perform calibration ,and then 
+In this section, there is fully explained instruction of how to perform calibration ,and then how to move the robot. To clarify, there are two different machines (remote PC and turtlebot) in which we should perform all the commands. 
 ## Calibration 
+
+### **Imaging Calibration**
+In this step, we set appropriate values according to the contrast, sharpness, brightness etc. of the image to get more clear images from the camera. This step is an optional if the image is clear beforehand.
+1. Launch roscore on `Remote PC`
+```bash
+roscore
+```
+2. Enable the `raspi_cam`  publisher on `Turtlebot`
+```bash
+roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_camera_pi.launch
+```
+3. Until now, there is a publisher on the Turtlebot which publishes the images on the topic `/camera/image/` or `/camera/image/compressed`, and the remote PC which runs the `roscore` and it is able to share information with the Turtlebot. To ensure that 
+the publisher works correctly, you can execute the rqt_image_view on the `Remote PC`. Then, on the checkbox you can find all the related topics that shares image messages.
+```bash
+rqt_image_view
+```
+4. Execute `rqt_reconfigure` on `Remote PC`
+`rqt_reconfigure` is a rqt plugin that provides GUI to reconfigure the parameters. This can be performs only if the parameters are accessible via the `dynamic_reconfigure`.
+```bash
+rosrun rqt_reconfigure rqt_reconfigure
+```
+The in the pop-up window you should select the camera in order to modify the parameters.
+When you change the parameters, you should modify the file which is located **robotics_project/turtlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_camera/calibration** folder.
+> **_Note:_** In case that you have already launched the roscore and the camera publisher from the previous step you do not have to relaunch them again.
+### **Intrinsic Calibration**
+Having printed the checkerboard on A4 size paper, you will use this checker board for Intrinsic Calibration. 
+<!-- Add the checkerboard here -->
+1. Launch roscore on `Remote PC`
+
+2. Enable the `raspi_cam`  publisher on `Turtlebot`
+```bash
+roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_camera_pi.launch
+```
+1. Launch the intrinsic camera calibration launch file on `Remote PC`
+```bash
+export AUTO_IN_CALIB=calibration
+export GAZEBO_MODE=false
+roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+```
+> **_Note:_** the `AUTO_IN_CALIB` is responsible for the mode that the instrinsic calibration launch file will be launched.
+This launch file will run the `camera_calibration` package if the mode is in calibration. Moving the checkerboard in front of the camera it will acquire all the patterns that it needs for all the axis. When it will get all the required patterns, you should click on the calibrate button. After a while, the **save** button will be enabled.
+> **_Note:_** the output of the save button is **calibration.tar.gz** file, you should extract only the **ost.yaml** file which contains all the parameters that we need.
+4. Copy and paste the data from **ost.yaml** to **camerav2_320x240_30fps.yaml** which is located `/robotics_project/turtlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_camera/calibration/intrinsic_calibration
+
+### **Extrinsic Calibration**
+In this phase, as we described in the theoritical part we are going to project the ground which shows the road in which the robot is.
+
+1. Launch roscore on `Remote PC`
+
+2. Enable the `raspi_cam`  publisher on `Turtlebot`
+```bash
+roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_camera_pi.launch
+```
+3. Launch the intrinsic calibration, but in action mode on the grounds that you finished the previous step
+```bash
+export AUTO_IN_CALIB=action
+export GAZEBO_MODE=false
+roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_intrinsic_camera_calibration.launch
+```
+
+4. Run the extrinsic calibration launch file on `Remote PC`
+```bash
+export AUTO_EX_CALIB=calibration
+roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_extrinsic_camera_calibration.launch
+```
+> **_Note:_** the `AUTO_EX_CALIB` is responsible for the mode that the extrinsic calibration launch file will be launched.
+5. Run rqt on `Remote PC`
+```bash
+rqt
+```
+In the pop-up window, navigate to the **plugins>visualization>Image View**. Using that you are able to create multiple image views for different image topics.
+From the previous step, having the calibration mode enabled we are publishing two topics:
+* **/camera/image_extrinsic_calib/compressed** : which is the current image with a red border. This red border is according to 4 image coordinated and it states the projected image.
+  <!-- Add an image -->
+* **/camera/image_projected_compensated** : is the projected output. It worth noting that the topic contains the word *compensated* which is the image processing step to improve the quality of th image. 
+  <!-- Add an image -->
+6. To reconfigure the coordinates of the projected frame (edit the red boarder), we should also launch the `rqt_reconfigure` by executing the following command:
+```bash
+rosrun rqt_reconfigure rqt_reconfigure
+```
+   * The `image_projection` node which is into the `turtlebot3_autorace_extrinsic_camera_calibration.launch` file load all the parameters about the aforementioned coordinates from the `/calibration/extrinsic_calibration/projection.yaml`. In calibration mode, it reads the parameters from the `rqt_reconfigure` through the Dynamic Reconfigure. From the camera dropdown, select the `image_compensation_projected` and from the `image_mono`, select the `image_projection`.
+     * **image_compensation_projected** has the `clip_hist_percent` which is a clip limit to limit the maximum slope in the transform function. More specifically, it limits the maximum number of ssamples per bin in each tile, and the clipped samples are then redistributed inniformly because the CDF must be normalized yo [0,1].
+     <!-- Add and image -->
+     * **image_projection** has 4 different parameters, one for each corner. 
 <!-- 
 
 # Conclusion
