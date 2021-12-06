@@ -109,7 +109,27 @@ angular.z = -max(angular_z, -2.0) if angular_z < 0 else -min(angular_z, 2.0)
 Finally, we publish the velocities to the robot using the `cmd_vel` topic.
 
 # Instruction to run the turtlebot  
-In this section, there is fully explained instruction of how to perform calibration ,and then how to move the robot. To clarify, there are two different machines (remote PC and turtlebot) in which we should perform all the commands. 
+In this section, there is fully explained instruction of how to perform calibration ,and then how to move the robot. To clarify, there are two different machines (remote PC and turtlebot) in which we should perform all the commands.  
+## System and software requirements
+This project have been tested in `Ubuntu 16.04` with `ROS Kinetic` and `Ubuntu 20.04` with `ROS Melodic` respectively.
+In this project we used:
+* Turtlebot 3 Burger
+* Remote PC
+* Raspberry Pi Camera module
+* The autorace track
+## Environment - Autorace Packages Setup
+
+The bash block below should be executed in both `Remote PC` and `Turtlebot3`
+```bash
+roscd ; cd ../src
+git clone https://github.com/manoskout/robotics_project.git
+cd ~/catkin_ws && catkin_make
+```
+After that, you should also install some additional dependencies on `Remote PC`
+```bash
+sudo apt-get install ros-kinetic-image-transport ros-kinetic-cv-bridge ros-kinetic-vision-opencv python-opencv libopencv-dev ros-kinetic-image-proc
+```
+Then, the next step is camera calibration.
 ## Calibration 
 
 ### **Imaging Calibration**
