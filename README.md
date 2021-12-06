@@ -34,7 +34,7 @@ In this section, we briefly describe the packages and their dependencies that us
 This step is based on camera calibration in order to set the extrinsic and intrinsic calibration. All the calibration steps are integrated into nodes. Also it contains a node which calls the `raspicam_node` which used in order to publish the camera frames. We will discuss below how it works.
 #### **Camera calibration**
 Camera calibration is an integral part of this project. For this phase, the project uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package which allows easy calibration of monocular cameras using a checkerboard calibration target. The packagess uses OpenCV library which contains the camera calibration method. 
-<p align="center"><img src="img/checkerboard.png" alt="checkerboard" width="300"/></p>  
+<p align="center"><img src="img/theory/checkerboard.png" alt="checkerboard" width="300"/></p>  
 
 #### **Intrinsic calibration**  
 As we aforementioned, it uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package. This package allows easy calibration of monocular or stero cameras. The checkerboard was the tool in order to fix the *Radial Distortion* of the acquired image. *Radial or Barrel Distortion* can be presented as:
@@ -63,7 +63,7 @@ Furthermore, **intrinsic parameters** allows a mapping between camera coordinate
 It deemed as the second phase of the first stem. Extrinsic calibration defines a location and orientation of the camera with respect to the world frame. Similarly, we could state that they corresponds to rotation and translation vectors which translates a coordinates of a 3D point to a coordinate system. 
 
 **Image Projection** gets 4 coordinates of the acquired image in order to get the projection according to these coordinates. The image projection established using homography tranformation. Homography is a transformation that is occuring between two planes. To put it briefly, it is mapping between two planar projection of an image. It is represented by 3x3 transformation matring in a homogenous coordinates space. Mathematically the homography is represented as:
-<p align="center"><img src="images/../img/homogeneous.png"/></p>  
+<p align="center"><img src="img/theory/homogeneous.png"/></p>  
 
 According to the above, in the proposed method, we set a calibration step in order to get the right coordinates to project the road containing both the yellow and white line. For this reason, we set specific top and botton corners. Then, the program add Gaussian Blur to the image. Nextly, we perform the homography transform process having the corner's coordinates. `cv2.findHomography()` is a OpenCv function that used for this reason, the documentation of this function is [here](https://www.google.com). Having the 3x3 matrix from `findHomography()` function we use the `cv2.warpPerspective()` function to get the projected image. Due to the fact that the image is projected and there is a distortion, black triangles filled these spaces on the bottom corners of the projected image.
 <!-- TODO : Take a screenshot from the lab and add it as an example HERE -->
@@ -142,20 +142,27 @@ roscore
 ```bash
 roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_camera_pi.launch
 ```
-3. Until now, there is a publisher on the Turtlebot which publishes the images on the topic `/camera/image/` or `/camera/image/compressed`, and the remote PC which runs the `roscore` and it is able to share information with the Turtlebot. To ensure that 
-the publisher works correctly, you can execute the rqt_image_view on the `Remote PC`. Then, on the checkbox you can find all the related topics that shares image messages.
+3. Until now, there is a publisher on the Turtlebot which publishes the images on the topic `/camera/image/` or `/camera/image/compressed`, and the remote PC which runs the `roscore` and it is able to share information with the Turtlebot. To ensure that the publisher works correctly, you can execute the rqt_image_view on the `Remote PC`. Then, on the checkbox you can find all the related topics that shares image messages.  
 ```bash
 rqt_image_view
-```
-4. Execute `rqt_reconfigure` on `Remote PC`
-`rqt_reconfigure` is a rqt plugin that provides GUI to reconfigure the parameters. This can be performs only if the parameters are accessible via the `dynamic_reconfigure`.
+```  
+<p align="center"><img src="img/instr/rqt_image_view.png"/></p>  
+4. Execute `rqt_reconfigure` on `Remote PC`  
+`rqt_reconfigure` is a rqt plugin that provides GUI to reconfigure the parameters. This can be performs only if the parameters are accessible via the `dynamic_reconfigure`.  
+
 ```bash
 rosrun rqt_reconfigure rqt_reconfigure
 ```
+
 The in the pop-up window you should select the camera in order to modify the parameters.
-When you change the parameters, you should modify the file which is located **robotics_project/turtlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_camera/calibration** folder.
+When you change the parameters, you should modify the file which is located: **robotics_project/turtlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_camera/calibration** folder.  
+
 > **_Note:_** In case that you have already launched the roscore and the camera publisher from the previous step you do not have to relaunch them again.
+
+<p align="center"><image src="img/instr/rqt_camera_calib.png"/></p>
+
 ### **Intrinsic Calibration**
+
 Having printed the checkerboard on A4 size paper, you will use this checker board for Intrinsic Calibration. 
 <!-- Add the checkerboard here -->
 1. Launch roscore on `Remote PC`
