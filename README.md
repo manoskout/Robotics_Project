@@ -179,7 +179,10 @@ roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_intrinsic
 ```
 > **_Note:_** the `AUTO_IN_CALIB` is responsible for the mode that the instrinsic calibration launch file will be launched.
 This launch file will run the `camera_calibration` package if the mode is in calibration. Moving the checkerboard in front of the camera it will acquire all the patterns that it needs for all the axis. When it will get all the required patterns, you should click on the calibrate button. After a while, the **save** button will be enabled.  
-> **_Note:_** the output of the save button is **calibration.tar.gz** file, you should extract only the **ost.yaml** file which contains all the parameters that we need.
+<p align="center"><img src="img/instr/intrinsic_calib.png"/></p>  
+
+> **_Note:_** the output of the save button is **calibration.tar.gz** file, you should extract only the **ost.yaml** file which contains all the parameters that we need.  
+
 4. Copy and paste the data from **ost.yaml** to **camerav2_320x240_30fps.yaml** which is located `/robotics_project/turtlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_camera/calibration/intrinsic_calibration
 
 ### **Extrinsic Calibration**
@@ -202,7 +205,10 @@ roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_intrinsic
 ```bash
 export AUTO_EX_CALIB=calibration
 roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_extrinsic_camera_calibration.launch
-```
+```  
+
+<p align="center"><img src="img/instr/extrinsic_calib.png"/></p>  
+
 > **_Note:_** the `AUTO_EX_CALIB` is responsible for the mode that the extrinsic calibration launch file will be launched.
 5. Run rqt on `Remote PC`
 ```bash
@@ -260,6 +266,7 @@ Similarly, here we used the `AUTO_DT_CALIB` which is responsible on what mode we
 ```bash
 rosrun rqt_reconfigure rqt_reconfigure
 ```
+<p align="center"><img src="img/instr/dt_calibration.png"/></p>
 After that, in the shown dialog, there is a set of parameters called `detect_lane`. This dialog contains HSV parameters related both for yellow and white lane. 
 <!-- Add an image showing the dialog of this command -->
 > **_Note_:** Due to the fact that physical environment interfere the line detection process, the line color filtering is difficult. The modified parameters will interact different throughout the day (because of the luminance)  

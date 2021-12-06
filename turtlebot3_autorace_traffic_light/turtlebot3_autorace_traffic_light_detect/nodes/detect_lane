@@ -504,7 +504,7 @@ class DetectLane():
                 self.pub_lane.publish(msg_desired_center)
 
             self.pub_image_lane.publish(self.cvBridge.cv2_to_compressed_imgmsg(final, "jpg"))
-
+            print("Center: {}".format(centerx.item(350)))
         elif self.pub_image_type == "raw":
             if self.is_center_x_exist == True:
                 # publishes lane center
