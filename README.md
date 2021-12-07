@@ -67,6 +67,7 @@ It deemed as the second phase of the first stem. Extrinsic calibration defines a
 
 According to the above, in the proposed method, we set a calibration step in order to get the right coordinates to project the road containing both the yellow and white line. For this reason, we set specific top and botton corners. Then, the program add Gaussian Blur to the image. Nextly, we perform the homography transform process having the corner's coordinates. `cv2.findHomography()` is a OpenCv function that used for this reason, the documentation of this function is [here](https://www.google.com). Having the 3x3 matrix from `findHomography()` function we use the `cv2.warpPerspective()` function to get the projected image. Due to the fact that the image is projected and there is a distortion, black triangles filled these spaces on the bottom corners of the projected image.
 <!-- TODO : Take a screenshot from the lab and add it as an example HERE -->
+<p align="center"><img src="img/theory/image_projection.png" width="600"></p>
 
 **Image Compensation** handle this using histogram equalization to improve the quality (brightness & contrast) of the groun-projected image. The histogram equalization used because of the distortion and the integration of Gaussian blur in the image. This nodes just get the projected image via the topic that the image message published. Then converts the image to a grayscale because it computationally efficient to perform histogram equalization. Lastly, using the `cv2.convertScaleAbs()` function from OpenCV, it scales, calculates absolute values and converts the result to 8-bit. To put it differently, the aforementioned function used to update the compensated image from the equalized one.
 
@@ -300,8 +301,10 @@ This launch file enables the `control_lane` node. It subscribe the `/detect/lane
 
 ### **Results**
 <!-- Add a video related to the commands above -->
+Due to the lihtness changes throughout the day, the modifications of the HSV value for the Detect Lane calibration are continious. After a plethora of experiments, we found the most appropriate values, making the robot able to follow the lane. The video below show the results of the autorace robot.
+[This link](https://drive.google.com/file/d/18MEHNkZ5sAiVhV4xFWQW4ufk0lJ2UDF5/view?usp=sharing), contains the final experiment with the parameters that exists on the instructions above. Below, there is fast forward
 
-<!-- 
+<p align="center"><video src="https://user-images.githubusercontent.com/32570934/145036418-96758803-a693-4ece-92fe-4b40159151ef.mp4" data-canonical-src="https://user-images.githubusercontent.com/32570934/145036418-96758803-a693-4ece-92fe-4b40159151ef.mp4" controls="controls" muted="muted"></p>
 
 # Conclusion
 
