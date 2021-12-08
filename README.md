@@ -8,7 +8,7 @@ This report will describe in details the project given during Master in Computer
 
 ## What is ROS?
 The Robot Operating System (ROS) is an open source middleware which contains a set of libraries,softwares and tools that are used to facilitate the development of robotic applications. There is a plethora of features from sensor drivers to state-of-the-art algorithms. As middleware, it contains characteristics of both software and hardware, hencee, it is able to perform various actions like hardware abstraction and low level control.
-Until now, different version of ROS exists with some crusial differences, so for compatibility reasons we are using the Melodic release.
+Until now, different version of ROS exists with some crucial differences, so for compatibility reasons we are using the Melodic release.
 
 ## Robot used for this scenario
 ### Turtlebot Description
@@ -17,7 +17,7 @@ For the project, the mobile robot used is a Turtlebot3 Burger. The Turtlebot3 is
 ## Scenario Description
 Our goal is to complete the following scenario:
 
-1. **Camera Calibraton** is a crusial step for the fisheye camera which is integrated to Turtlebot3. The implementation uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package from ROS. This packages uses OpenCV camera calibration, fully described [here](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html). For this step we only have to use the checkerboard in order to get all the related coefficients for the undistortion.
+1. **Camera Calibration** is a first step for the fisheye camera which is integrated to Turtlebot3. The implementation uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package from ROS. This packages uses OpenCV camera calibration, fully described [here](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html). For this step we only have to use the checkerboard in order to get all the related coefficients for the undistortion.
 
 2. **Lane detection** is a keystone for the robot in order to be able to move according to the lines. In the race map that we used, the inner line is the yellow line and the outter line is the white one. To make the robot able to work we followed a "lane detection" calibration in which we set the most reliabe parameters of Hue Saturation and Value (HSV) to make the robot able to identify the `yellow` and `white` lines.
 3. **Lane Following** is the last phase in which we implement the PD controller. The trajectory of the robot is performed according to both PD controller and the detected lane.
@@ -25,7 +25,7 @@ Our goal is to complete the following scenario:
 # Repository Content
 ## Original Code links
 The original code of this project is based on the tutorial of [Turtlebot_Autorace2020](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/#turtlebot3-autorace-2020).
-In this GitHub repository there is only the one of the misions (trafic light mission).Also, there are some additional file (images, calibration files, etc.).
+In this GitHub repository there is only the one of the missions (traffic light mission).Also, there are some additional file (images, calibration files, etc.).
 
 ## Implementation Steps
 In this section, we briefly describe the packages and their dependencies that used for this project. [Here](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/#turtlebot3-autorace-2020) are the links that you can use in order to install all the related packages for the project.
@@ -33,10 +33,11 @@ In this section, we briefly describe the packages and their dependencies that us
 ### **Step 1: Calibration**
 This step is based on camera calibration in order to set the extrinsic and intrinsic calibration. All the calibration steps are integrated into nodes. Also it contains a node which calls the `raspicam_node` which used in order to publish the camera frames. We will discuss below how it works.
 #### **Camera calibration**
-Camera calibration is an integral part of this project. For this phase, the project uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package which allows easy calibration of monocular cameras using a checkerboard calibration target. The packagess uses OpenCV library which contains the camera calibration method. 
-<p align="center"><img src="img/theory/checkerboard.png" alt="checkerboard" width="300"/></p>  
+Before we continue with Intrinsic and extrinsic calibration, there is 
 
 #### **Intrinsic calibration**  
+Camera calibration is an integral part of this project. For this phase, the project uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package which allows easy calibration of monocular cameras using a checkerboard calibration target. The packagess uses OpenCV library which contains the camera calibration method. 
+<p align="center"><img src="img/theory/checkerboard.png" alt="checkerboard" width="300"/></p>  
 As we aforementioned, it uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package. This package allows easy calibration of monocular or stero cameras. The checkerboard was the tool in order to fix the *Radial Distortion* of the acquired image. *Radial or Barrel Distortion* can be presented as:
 
 <p align="center"><img src="https://render.githubusercontent.com/render/math?math=\begin{aligned}x_{distorted}=x(1%2Bk_{1}r^2%2Bk_{2}r^4%2Bk_{3}r^6)\end{aligned}"></p>
@@ -106,6 +107,8 @@ The last important checkpoint before publishing the values to the robot, is that
 ```python
 angular.z = -max(angular_z, -2.0) if angular_z < 0 else -min(angular_z, 2.0)
 ```
+
+<p align="center"><img src="img/theory/controller.png"/></p>
 
 Finally, we publish the velocities to the robot using the `cmd_vel` topic.
 
@@ -299,16 +302,20 @@ roslaunch turtlebot3_autorace_traffic_light_control turtlebot3_autorace_control_
 ```
 This launch file enables the `control_lane` node. It subscribe the `/detect/lane` topic which contains the `center`, setting robot between the yellow and the white line by updating the `/cmd_vel` topic which updates the linear and angular velocity of the Turtlebot.
 
-### **Results**
+# Results
 <!-- Add a video related to the commands above -->
-Due to the lihtness changes throughout the day, the modifications of the HSV value for the Detect Lane calibration are continious. After a plethora of experiments, we found the most appropriate values, making the robot able to follow the lane. The video below show the results of the autorace robot.
-[This link](https://drive.google.com/file/d/18MEHNkZ5sAiVhV4xFWQW4ufk0lJ2UDF5/view?usp=sharing), contains the final experiment with the parameters that exists on the instructions above. Below, there is fast forward
+Due to the lightness changes throughout the day, the modifications of the HSV value for the Detect Lane calibration are continious. After a plethora of experiments, we found the most appropriate values, making the robot able to follow the lane. The video below show the results of the autorace robot.
+[This link](https://drive.google.com/file/d/18MEHNkZ5sAiVhV4xFWQW4ufk0lJ2UDF5/view?usp=sharing), contains the final experiment with the parameters that exists on the instructions above. Below, there is fast forward of this experiment.
 
-<p align="center"><video src="https://user-images.githubusercontent.com/32570934/145036418-96758803-a693-4ece-92fe-4b40159151ef.mp4" data-canonical-src="https://user-images.githubusercontent.com/32570934/145036418-96758803-a693-4ece-92fe-4b40159151ef.mp4" controls="controls" muted="muted"></p>
+<p align="center"><video src="https://user-images.githubusercontent.com/32570934/145036418-96758803-a693-4ece-92fe-4b40159151ef.mp4" data-canonical-src="https://user-images.githubusercontent.com/32570934/145036418-96758803-a693-4ece-92fe-4b40159151ef.mp4" controls="controls"></p>
+
+According to this video, it can be noticed that the line is well detected but some times it recognizes the white line as yellow. This issue exists because of the lightness auto adjustment and the noise that the image contains. In the mission of the tunnel, It work fine according to camera video, although, during the passing of the tunnel the turtlebot is missing the lines. This caused due to the lack of lightness. Thankfully, this can be partially handled, when the robot detect even one line which auto adjusts the center according to one just line. 
 
 # Conclusion
+This project
+<!-- Check this sentence again -->
+<!--
 
 # References
 
-## Credits
  -->
