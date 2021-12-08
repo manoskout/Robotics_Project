@@ -27,36 +27,77 @@ from sensor_msgs.msg import Image, CompressedImage
 from dynamic_reconfigure.server import Server
 from turtlebot3_autorace_traffic_light_camera.cfg import ImageCompensationParamsConfig
 
+
 class ImageCompensation():
+    """ImageCompensation is a object that according to params performs histogram equalization
+    to the acquired image to improve the quality.
+
+    ...
+    Methods
+    -------
+    cbGetImageCompensationParam(config,level)
+        Gets the Extrinsic Camera Calibration parameters
+    cbImageCompensation(msg_img)
+        Performs histogram equalization to the projected image
+    """
     def __init__(self):
+        """
+        Attributes
+        ----------
+        clip_hist_percent : float
+            It used to limits the slope of the CDF and therefore of the transformation function
+        is_caligration_mode : boolean
+            A boolean flag which is true if the launch file executed to perform calibration
+        sub_image_type : str
+            Subscribes a specific type of image (compressed of raw)
+        pub_image_type : str
+            Publishes a specific type of image (compressed of raw)
+        sub_image_original : rospy.Subscriber
+            A subscriber object that get the original image from the /camera/image_input/compressed topic
+        pub_image_compensated : rospy.Publisher
+            A publisher object that publishes the compensated image to the /camera/image_output/compressed topic
+        """
         self.clip_hist_percent = rospy.get_param("/camera/extrinsic_camera_calibration/clip_hist_percent", 1.)
 
         self.is_calibration_mode = rospy.get_param("~is_extrinsic_camera_calibration_mode", False)
-        if self.is_calibration_mode == True:
+        if self.is_calibration_mode:
             srv_image_compensation = Server(ImageCompensationParamsConfig, self.cbGetImageCompensationParam)
 
-
         self.sub_image_type = "compressed"  # "compressed" / "raw"
-        self.pub_image_type = "raw"         # "compressed" / "raw"
-
+        self.pub_image_type = "raw"  # "compressed" / "raw"
 
         if self.sub_image_type == "compressed":
             # subscribes compressed image 
-            self.sub_image_original = rospy.Subscriber('/camera/image_input/compressed', CompressedImage, self.cbImageCompensation, queue_size = 1)
+            self.sub_image_original = rospy.Subscriber('/camera/image_input/compressed', CompressedImage,
+                                                       self.cbImageCompensation, queue_size=1)
         elif self.sub_image_type == "raw":
             # subscribes raw image 
-            self.sub_image_original = rospy.Subscriber('/camera/image_input', Image, self.cbImageCompensation, queue_size = 1)
+            self.sub_image_original = rospy.Subscriber('/camera/image_input', Image, self.cbImageCompensation,
+                                                       queue_size=1)
 
         if self.pub_image_type == "compressed":
             # publishes compensated image in compressed type 
-            self.pub_image_compensated = rospy.Publisher('/camera/image_output/compressed', CompressedImage, queue_size = 1)
+            self.pub_image_compensated = rospy.Publisher('/camera/image_output/compressed', CompressedImage,
+                                                         queue_size=1)
         elif self.pub_image_type == "raw":
             # publishes compensated image in raw type
-            self.pub_image_compensated = rospy.Publisher('/camera/image_output', Image, queue_size = 1)
+            self.pub_image_compensated = rospy.Publisher('/camera/image_output', Image, queue_size=1)
 
         self.cvBridge = CvBridge()
 
     def cbGetImageCompensationParam(self, config, level):
+        """Gets the clip_hist_percent parameter from the config file which is updated through the rqt_reconfigure
+
+        Parameters
+        ----------
+        config : configuration file (yaml-based)
+            This configuration variable contains the defined parameters from the rqt_reconfigure
+
+        Returns
+        -------
+        config : configuration file (yaml-based)
+            The configuration file that contains the defined parameters
+        """
         rospy.loginfo("[Image Compensation] Extrinsic Camera Calibration Parameter reconfigured to")
         rospy.loginfo("clip_hist_percent : %f", config.clip_hist_percent)
 
@@ -65,6 +106,13 @@ class ImageCompensation():
         return config
 
     def cbImageCompensation(self, msg_img):
+        """Performs image compensation to the projected image. This function runs to the subscriber.
+        Hence, it runs iteratively. In every iteration get the compensated image and it publishes to the related publisher
+        Parameters
+        ----------
+        msg_img: sensor_msgs.msg.Image or sensor_msgs.msg.CompressedImage
+            The image that we get from the subscriber (raw or compressed)
+        """
         if self.sub_image_type == "compressed":
             # converts compressed image to opencv image
             np_image_original = np.fromstring(msg_img.data, np.uint8)
@@ -77,7 +125,7 @@ class ImageCompensation():
 
         ## Image compensation based on pseudo histogram equalization
         clip_hist_percent = self.clip_hist_percent
-        
+
         hist_size = 256
         min_gray = 0
         max_gray = 0
@@ -102,7 +150,7 @@ class ImageCompensation():
             min_gray = 0
             while accumulator[min_gray] < clip_hist_percent:
                 min_gray += 1
-            
+
             max_gray = hist_size - 1
             while accumulator[max_gray] >= (max - clip_hist_percent):
                 max_gray -= 1
@@ -124,6 +172,7 @@ class ImageCompensation():
 
     def main(self):
         rospy.spin()
+
 
 if __name__ == '__main__':
     rospy.init_node('image_compensation')

@@ -28,7 +28,40 @@ from dynamic_reconfigure.server import Server
 from turtlebot3_autorace_traffic_light_camera.cfg import ImageProjectionParamsConfig
 
 class ImageProjection():
+    """ImageProjection is an object which contains or defines all the related parameters to set a ground-projected image
+
+    ...
+    Methods
+    -------
+    cbGetImageProjectionParam(config, level)
+        Gets the Image projection parameters from the configuration file
+    cbImageProjection(msg_img)
+        Projects the ground-projected image and it publishes this image to a topic
+
+    """
     def __init__(self):
+        """
+        Attributes
+        ----------
+        top_x : int
+            The top point in respect to x-axis
+        top_y : int
+            The top point in respect to y-axis
+        bottom_x : int
+            The bottom point in respect to x-axis
+        bottom_y : int
+            The bottom point in respect to y-axis
+        is_caligration_mode : boolean
+            A boolean flag which is true if the launch file executed to perform calibration
+        sub_image_type : str
+            Subscribes a specific type of image (compressed of raw)
+        pub_image_type : str
+            Publishes a specific type of image (compressed of raw)
+        sub_image_original : rospy.Subscriber
+            A subscriber object that get the original image from the /camera/image_input/compressed topic
+        pub_image_projected : rospy.Publisher
+            A publisher object that publishes the projected image to the /camera/image_output/compressed topic
+        """
         self.top_x = rospy.get_param("/camera/extrinsic_camera_calibration/top_x", 80)
         self.top_y = rospy.get_param("/camera/extrinsic_camera_calibration/top_y", 11)
         self.bottom_x = rospy.get_param("/camera/extrinsic_camera_calibration/bottom_x", 113)
@@ -67,6 +100,18 @@ class ImageProjection():
 
 
     def cbGetImageProjectionParam(self, config, level):
+        """Gets the parameters from the config file which is updated through the rqt_reconfigure
+
+        Parameters
+        ----------
+        config : configuration file (yaml-based)
+            This configuration variable contains the defined parameters from the rqt_reconfigure
+
+        Returns
+        -------
+        config : configuration file (yaml-based)
+            The configuration file that contains the defined parameters
+        """
         rospy.loginfo("[Image Projection] Extrinsic Camera Calibration Parameter reconfigured to")
         rospy.loginfo("top_x : %d, top_y : %d, bottom_x : %d, bottom_y : %d", config.top_x, config.top_y, config.bottom_x, config.bottom_y)
 
@@ -78,6 +123,13 @@ class ImageProjection():
         return config
 
     def cbImageProjection(self, msg_img):
+        """Performs image projection to the original image. This function runs to the subscriber.
+        Hence, it runs iteratively. In every iteration get the projected image and it publishes to the related publisher
+        Parameters
+        ----------
+        msg_img: sensor_msgs.msg.Image or sensor_msgs.msg.CompressedImage
+            The image that we get from the subscriber (raw or compressed)
+        """
         if self.sub_image_type == "compressed":
             # converts compressed image to opencv image
             np_image_original = np.fromstring(msg_img.data, np.uint8)
