@@ -321,8 +321,7 @@ In the mission of the tunnel, It works fine according to the camera video, altho
 
 
 
-https://user-images.githubusercontent.com/32570934/145586587-8f168bd0-09e9-4cf4-befe-0d5b50133a78.mp4
-
+<p align="center"><video src="https://user-images.githubusercontent.com/32570934/145586587-8f168bd0-09e9-4cf4-befe-0d5b50133a78.mp4"/></p>
 
 
 ## Continuous Calibration for the line detection
