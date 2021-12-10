@@ -319,11 +319,17 @@ It should be noticed that the line is well detected but sometimes it recognizes 
 ## Tunnel 
 In the mission of the tunnel, It works fine according to the camera video, although, during the passing of the tunnel, the turtlebot is missing the lines (in small periods). This is caused due to the lack of lightness. Thankfully, this can be partially handled, when the robot detects even one line which auto-adjusts the center according to one line.
 
+
+
+https://user-images.githubusercontent.com/32570934/145586587-8f168bd0-09e9-4cf4-befe-0d5b50133a78.mp4
+
+
+
 ## Continuous Calibration for the line detection
-Since the lightness of the environment tends to change during the day, line detection calibration is essential in order to prevent misfunction throughout the race. 
+Since the lightness of the environment tends to change during the day, line detection calibration is essential in order to prevent misfunction throughout the race. To confront this issuewe could define different sets of line detecttion parameters for different occasions but it is not an ideal sollution. Alternatively, we can use edge detection instead of colour detection but we should change the deciding part which used to move the robot according to the center of these lines.
 
 # Conclusion
-This project was based on the [Autonomous Driving Tutorial by Robotis](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/), containing only the Line Following mission.
+This project was based on the [Autonomous Driving Tutorial by Robotis](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/), containing only the Line Following mission. It is briefly introduce simple line following detection using colour picking.
 <!-- Check this sentence again -->
 <!--
 
