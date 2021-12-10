@@ -17,23 +17,23 @@ For the project, the mobile robot used is a Turtlebot3 Burger. The Turtlebot3 is
 ## Scenario Description
 Our goal is to complete the following scenario:
 
-1. **Camera Calibration** is a first step for the fisheye camera which is integrated into Turtlebot3. The implementation uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package from ROS. This packages uses OpenCV camera calibration, fully described [here](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html). For this step we only have to use the checkerboard in order to get all the related coefficients for the undistortion.
+1. **Camera Calibration** is a first step for the fisheye camera which is integrated into Turtlebot3. The implementation uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package from ROS. This package uses OpenCV camera calibration, fully described [here](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html). For this step, we only have to use the checkerboard to get all the related coefficients for the undistortion (Intrinsic Calibration). Then, using the undistorted image, we perform extrinsic calibration related to the ground-projection combined with image compensation for better quality of the projected image. 
 
-2. **Lane detection** is a keystone for the robot in order to be able to move according to the lines. In the race map that we used, the inner line is the yellow line and the outter line is the white one. To make the robot able to work we followed a "lane detection" calibration in which we set the most reliabe parameters of Hue Saturation and Value (HSV) to make the robot able to identify the `yellow` and `white` lines.
+2. **Lane detection** is a keystone for the robot in order to be able to move according to the lines. In the race map that we used, the inner line is the yellow line and the outer line is the white one. To make the robot able to work we followed a "lane detection" calibration in which we set the most reliabe parameters of Hue Saturation and Value (HSV) to make the robot able to identify the `yellow` and `white` lines.
 3. **Lane Following** is the last phase in which we implement the PD controller. The trajectory of the robot is performed according to both PD controller and the detected lane.
 <!-- 3. **Traffic Lights** is the last phase of the project. More specifically the turtlebot should be able to recognize 3 differert colors in order to get the right decision. Similarly, like the Lane Detection calibration, we adjust the aforementioned parameters for the `yellow`, `red` and `green` colours respectively. -->
 # Repository Content
 ## Original Code links
 The original code of this project is based on the tutorial of [Turtlebot_Autorace2020](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/#turtlebot3-autorace-2020).
-In this GitHub repository there are only one of the missions (traffic light mission). Also, there are some additional files (images, calibration files, etc.).
+In this GitHub repository, there is only one of the missions (traffic light mission). Also, there are some additional files (images, calibration files, etc.).
 
 ## Implementation Steps
-In this section, we briefly describe the packages and their dependencies that used for this project. [Here](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/#turtlebot3-autorace-2020) are the links that you can use in order to install all the related packages for the project.
+In this section, we briefly describe the packages and their dependencies used for this project. [Here](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/#turtlebot3-autorace-2020) are the links that you can use in order to install all the related packages for the project.
 
 ### **Step 1: Calibration**
 This step is based on camera calibration to set the extrinsic and intrinsic calibration. All the calibration steps are integrated into nodes. Also, it contains a node which calls the `raspicam_node` which is used to publish the camera frames. We will discuss below how it works.
 #### **Camera calibration**
-Before we continue with Intrinsic and extrinsic calibration, there is 
+Before we continue with Intrinsic and extrinsic calibration, there is the common step in which we can modify some parameters for the camera such as Sharpness, Contrast, etc. 
 
 #### **Intrinsic calibration**  
 Camera calibration is an integral part of this project. For this phase, the project uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package which allows easy calibration of monocular cameras using a checkerboard calibration target. The packagess uses OpenCV library which contains the camera calibration method. 
@@ -158,10 +158,10 @@ rqt_image_view
 rosrun rqt_reconfigure rqt_reconfigure
 ```
 
-The in the pop-up window you should select the camera in order to modify the parameters.
+The in the pop-up window you should select the camera to modify the parameters.
 When you change the parameters, you should modify the file which is located: **robotics_project/turtlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_camera/calibration** folder.  
 
-> **_Note:_** In case that you have already launched the roscore and the camera publisher from the previous step you do not have to relaunch them again.
+> **_Note:_** In case that you have already launched the roscore and the camera publisher from the previous step you do not have to relaunch them.
 
 <p align="center"><image src="img/instr/rqt_camera_calib.png"/></p>
 
@@ -198,7 +198,7 @@ In this phase, as we described in the theoretical part we are going to project t
 ```bash
 roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_camera_pi.launch
 ```
-3. Launch the intrinsic calibration, but in action mode on the grounds that you finished the previous step
+3. Launch the intrinsic calibration, but in action mode because you finished the previous step
 ```bash
 export AUTO_IN_CALIB=action
 export GAZEBO_MODE=false
@@ -218,7 +218,7 @@ roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_extrinsic
 ```bash
 rqt
 ```
-In the pop-up window, navigate to the **plugins>visualization>Image View**. Using that you are able to create multiple image views for different image topics.
+In the pop-up window, navigate to the **plugins>visualization>Image View**. Using that you can create multiple image views for different image topics.
 From the previous step, having the calibration mode enabled we are publishing two topics:
 * **/camera/image_extrinsic_calib/compressed** : which is the current image with a red border. This red border is according to 4 image coordinates and it states the projected image.
   <!-- Add an image -->
@@ -235,7 +235,7 @@ rosrun rqt_reconfigure rqt_reconfigure
 7. Lastly, you should go to the `/turtlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_camera/calibration/extrinsic_calibration/projection.yaml` and update the parameters that you modify. Also, in the same directory there is the `compensation.yaml` file and you can modify the `clip_hist_percent` if you have changed the value.
 <!-- Add an image -->
 ### **Check Calibration**
-When you will have finished the camera calibration step according to the instruction above, You should follow the instructions below to check the results of you calibration.
+When you will have finished the camera calibration step according to the instruction above, You should follow the instructions below to check the results of your calibration.
 1. If you have closed the roscore, you should rerun it to establish communication between the turtlebot and the Remote PC. Hence, run the `roscore` command on `Remote PC`
 2. Similarly, the raspberry pi camera publisher should be enabled if you have disabled it. Run-on `Turtlebot`
 ```bash
@@ -280,7 +280,7 @@ After that, in the shown dialog, there is a set of parameters called `detect_lan
 > * Hue (H): means the color, each color has its own region of the value, [here](https://en.wikipedia.org/wiki/HSL_and_HSV) are information about the color regions.  
 > * Saturation (S): means the ratio of colorfulness to the brightness  
 > * Value or Lightness (V or L): is the average of the largest and smallest color components.  
-> **_Line Calibration_**: As the [tutorial](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/) mentioned, is better to start by modifying the Hue to find the white and yellow color which have their own regions. Then, calibrate the low - high value of Saturation. Lastly, calibrate the lightness low - high value. It is worth noting that on the `detect_lane` node there is an auto-adjustment function, so calibrating lightness low value is meaningless.  
+> **_Line Calibration_**: As the [tutorial](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/) mentioned, is better to start by modifying the Hue to find the white and yellow colors which have their own regions. Then, calibrate the low - high value of Saturation. Lastly, calibrate the lightness low - high value. It is worth noting that on the `detect_lane` node there is an auto-adjustment function, so calibrating lightness low value is meaningless.  
 5. After the colour calibration, go to the **lane.yaml** file and update the values that corresponds to a better line detection. The path of this file is on **/robotics_project/turlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_detect/param/lane**
 <!-- Add an image showing the dialog of this command -->
 6. Close both `rqt_reconfigure` and `turtlebot3_autorace_detect_lane`
@@ -310,16 +310,17 @@ Due to the lightness changes throughout the day, the modifications of the HSV va
 
 <p align="center"><video src="https://user-images.githubusercontent.com/32570934/145036418-96758803-a693-4ece-92fe-4b40159151ef.mp4" data-canonical-src="https://user-images.githubusercontent.com/32570934/145036418-96758803-a693-4ece-92fe-4b40159151ef.mp4" controls="controls"></p>
 
-According to this video, there are some limitations that cannot be denied. In the list below, there is an explanation for each of those limitations.
+According to this video, some limitations cannot be denied. In the list below, there is an explanation for each of those limitations.
 
 ## Lightness - Noise
-It should be noticed that the line is well detected but sometimes it recognizes the white line as yellow. This issue exists because of the lightness auto adjustment and the noise that the image contains. 
+It should be noticed that the line is well detected but sometimes it recognizes the white line as yellow. This issue exists because of the lightness auto adjustment and the noise that the image contains.
+<p align="center"><img src="img/limitations/noise.png" width="500"></p>
 
 ## Tunnel 
-In the mission of the tunnel, It works fine according to the camera video, although, during the passing of the tunnel the turtlebot is missing the lines (in small periods of time). This is caused due to the lack of lightness. Thankfully, this can be partially handled, when the robot detects even one line which auto-adjusts the center according to one line.
+In the mission of the tunnel, It works fine according to the camera video, although, during the passing of the tunnel, the turtlebot is missing the lines (in small periods). This is caused due to the lack of lightness. Thankfully, this can be partially handled, when the robot detects even one line which auto-adjusts the center according to one line.
 
-## Continious Calibration for the line detection
-On the grounds that the lightness of the environment tends to change during the day, line detection calibration is essential in order to prevent misfunction throughout the race. 
+## Continuous Calibration for the line detection
+Since the lightness of the environment tends to change during the day, line detection calibration is essential in order to prevent misfunction throughout the race. 
 
 # Conclusion
 This project was based on the [Autonomous Driving Tutorial by Robotis](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/), containing only the Line Following mission.
