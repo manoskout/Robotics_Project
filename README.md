@@ -314,7 +314,7 @@ According to this video, some limitations cannot be denied. In the list below, t
 
 ## Lightness - Noise
 It should be noticed that the line is well detected but sometimes it recognizes the white line as yellow. This issue exists because of the lightness auto adjustment and the noise that the image contains.
-<p align="center"><img src="img/limitations/noise.png" width="500"></p>
+<p align="center"><img src="img/instr/noise.png" width="500"></p>
 
 ## Tunnel 
 In the mission of the tunnel, It works fine according to the camera video, although, during the passing of the tunnel, the turtlebot is missing the lines (in small periods). This is caused due to the lack of lightness. Thankfully, this can be partially handled, when the robot detects even one line which auto-adjusts the center according to one line.
