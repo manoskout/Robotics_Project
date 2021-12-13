@@ -251,7 +251,6 @@ roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_intrinsic
 export AUTO_EX_CALIB=action
 roslaunch turtlebot3_autorace_traffic_light_camera turtlebot3_autorace_extrinsic_camera_calibration.launch
 ```
-<!-- SHOW THE OUTPUT AFTER THIS COMMANDS -->
 ### **Lane Detection Calibration**
 The next phase is related to the detection of lines. As we clarified in the previous section, the lines will be a guidance of the Turtlebot. Thus, the camera should be well-calibrated in how to identify both yellow and white lines. Before we start this step, you should be sure that the **yellow line is placed on the left side** of the robot and the **white line on the right side** respectively.
 1. You should rerun all the previous commands on the **Check Calibration** step which publishes the projected image.
@@ -265,21 +264,18 @@ Similarly, here we used the `AUTO_DT_CALIB` which is responsible for what mode w
    * **/detect/image_yellow_lane_marker/compressed** is a filtered image
    * **/detect/image_white_lane_marker/compressed** is a filtered image
    * **/detect/image_lane/compessed** is the output of the detected lines containing the center lane which is responsible for the robot's trajectory
-4. Execute the rqt_reconfigure on `Remote PC`
+4. Execute the rqt_reconfigure on `Remote PC`  
 ```bash
 rosrun rqt_reconfigure rqt_reconfigure
-```
-<p align="center"><img src="img/instr/dt_calibration.png"/></p>
-After that, in the shown dialog, there is a set of parameters called `detect_lane. This dialog contains HSV parameters related to both the yellow and white lanes. 
-<!-- Add an image showing the dialog of this command -->
-> **_Note_:** Due to the fact that the physical environment interferes with the line detection process, line color filtering is difficult. The modified parameters will interact differently throughout the day (because of the luminance)  
-> 
->   
-> **_HSV-HSL explanation_:** 
-> * Hue (H): means the color, each color has its own region of the value, [here](https://en.wikipedia.org/wiki/HSL_and_HSV) are information about the color regions.  
-> * Saturation (S): means the ratio of colorfulness to the brightness  
-> * Value or Lightness (V or L): is the average of the largest and smallest color components.  
-> **_Line Calibration_**: As the [tutorial](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/) mentioned, is better to start by modifying the Hue to find the white and yellow colors which have their own regions. Then, calibrate the low - high value of Saturation. Lastly, calibrate the lightness low - high value. It is worth noting that on the `detect_lane` node there is an auto-adjustment function, so calibrating lightness low value is meaningless.  
+```  
+<p align="center"><img src="img/instr/dt_calibration.png"/></p>  
+After that, in the shown dialog, there is a set of parameters called `detect_lane. This dialog contains HSV parameters related to both the yellow and white lanes.  
+>**_Note_:** Due to the fact that the physical environment interferes with the line detection process, line color filtering is difficult. The modified parameters will interact differently throughout the day (because of the luminance)  
+>**_HSV-HSL explanation_:**  
+>* Hue (H): means the color, each color has its own region of the value, [here](https://en.wikipedia.org/wiki/HSL_and_HSV) are information about the color regions.  
+>* Saturation (S): means the ratio of colorfulness to the brightness  
+>* Value or Lightness (V or L): is the average of the largest and smallest color components.  
+>**_Line Calibration_**: As the [tutorial](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/) mentioned, is better to start by modifying the Hue to find the white and yellow colors which have their own regions. Then, calibrate the low - high value of Saturation. Lastly, calibrate the lightness low - high value. It is worth noting that on the `detect_lane` node there is an auto-adjustment function, so calibrating lightness low value is meaningless.  
 5. After the colour calibration, go to the **lane.yaml** file and update the values that corresponds to a better line detection. The path of this file is on **/robotics_project/turlebot3_autorace_traffic_light/turtlebot3_autorace_traffic_light_detect/param/lane**
 <!-- Add an image showing the dialog of this command -->
 6. Close both `rqt_reconfigure` and `turtlebot3_autorace_detect_lane`
