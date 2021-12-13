@@ -17,9 +17,9 @@ For the project, the mobile robot used is a Turtlebot3 Burger. The Turtlebot3 is
 ## Scenario Description
 Our goal is to complete the following scenario:
 
-1. **Camera Calibration** is a first step for the fisheye camera which is integrated into Turtlebot3. The implementation uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package from ROS. This package uses OpenCV camera calibration, fully described [here](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html). For this step, we only have to use the checkerboard to get all the related coefficients for the undistortion (Intrinsic Calibration). Then, using the undistorted image, we perform extrinsic calibration related to the ground-projection combined with image compensation for better quality of the projected image. 
+1. **Camera Calibration** is a first step for the fisheye camera which is integrated into Turtlebot3. The implementation uses the [camera_calibration](http://wiki.ros.org/camera_calibration) package from ROS. This package uses OpenCV camera calibration, fully described [here](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html). For this step, we only have to use the checkerboard to get all the related coefficients for the undistortion (Intrinsic Calibration). Then, using the undistorted image, we perform extrinsic calibration related to the ground projection combined with image compensation for better quality of the projected image. 
 
-2. **Lane detection** is a keystone for the robot in order to be able to move according to the lines. In the race map that we used, the inner line is the yellow line and the outer line is the white one. To make the robot able to work we followed a "lane detection" calibration in which we set the most reliabe parameters of Hue Saturation and Value (HSV) to make the robot able to identify the `yellow` and `white` lines.
+2. **Lane detection** is a keystone for the robot to be able to move according to the lines. In the race map that we used, the inner line is the yellow line and the outer line is the white one. To make the robot able to work we followed a "lane detection" calibration in which we set the most reliable parameters of Hue Saturation and Value (HSV) to make the robot able to identify the `yellow` and `white` lines.
 3. **Lane Following** is the last phase in which we implement the PD controller. The trajectory of the robot is performed according to both PD controller and the detected lane.
 <!-- 3. **Traffic Lights** is the last phase of the project. More specifically the turtlebot should be able to recognize 3 differert colors in order to get the right decision. Similarly, like the Lane Detection calibration, we adjust the aforementioned parameters for the `yellow`, `red` and `green` colours respectively. -->
 # Repository Content
@@ -317,7 +317,7 @@ It should be noticed that the line is well detected but sometimes it recognizes 
 <p align="center"><img src="img/instr/noise.png" width="500"></p>
 
 ## Tunnel 
-In the mission of the tunnel, It works fine according to the camera video, although, during the passing of the tunnel, the turtlebot is missing the lines (in small periods). This is caused due to the lack of lightness. Thankfully, this can be partially handled, when the robot detects even one line which auto-adjusts the center according to one line.
+In the mission of the tunnel, It works fine according to the camera video, although, during the passing of the tunnel, the turtlebot is missing the lines (in small periods). This caused due to the lack of lightness. Thankfully, this can be partially handled, when the robot detects even one line which auto-adjusts the center according to one line.
 
 
 
@@ -325,13 +325,15 @@ In the mission of the tunnel, It works fine according to the camera video, altho
 
 
 ## Continuous Calibration for the line detection
-Since the lightness of the environment tends to change during the day, line detection calibration is essential in order to prevent misfunction throughout the race. To confront this issuewe could define different sets of line detecttion parameters for different occasions but it is not an ideal sollution. Alternatively, we can use edge detection instead of colour detection but we should change the deciding part which used to move the robot according to the center of these lines.
+Since the lightness of the environment tends to change during the day, line detection calibration is essential to prevent misfunction throughout the race. To confront this issue, we could define different sets of line detection parameters for different occasions but it is not an ideal solution. Alternatively, we can use edge detection instead of color detection but we should change the deciding part which used to move the robot according to the center of these lines.
 
 # Conclusion
-This project was based on the [Autonomous Driving Tutorial by Robotis](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/), containing only the Line Following mission. It is briefly introduce simple line following detection using colour picking.
+This project was based on the [Autonomous Driving Tutorial by ROBOTIS](https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving/), containing only the Line Following mission. It briefly introduces line following detection using color picking. The implementation of this project uses the camera as the robot's decider. This project is a good introductory tutorial for those who wants to practicing to the computer vision techniques in robotics. Having this project as a base it can be easily test and enchance this project by integrating additional detection approaches for better results. Although, in this implementation there are some limitations like the discrepancy of the lightness during the day and the tunnel's lightness problem which was partially handled using appropriate parameters for the lane detection.
 <!-- Check this sentence again -->
-<!--
+
 
 # References
-
- -->
+1. TurtleBot3. From https://emanual.robotis.com/docs/en/platform/turtlebot3/autonomous_driving
+2. OpenCV: Camera Calibration. From https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html
+3. camera_calibration - ROS Wiki. From http://wiki.ros.org/camera_calibration
+4. OpenCV: Basic concepts of the homography explained with code. From https://docs.opencv.org/4.x/d9/dab/tutorial_homography.html
