@@ -269,7 +269,8 @@ Similarly, here we used the `AUTO_DT_CALIB` which is responsible for what mode w
 rosrun rqt_reconfigure rqt_reconfigure
 ```  
 <p align="center"><img src="img/instr/dt_calibration.png"/></p>  
-After that, in the shown dialog, there is a set of parameters called `detect_lane. This dialog contains HSV parameters related to both the yellow and white lanes.  
+After that, in the shown dialog, there is a set of parameters called `detect_lane. This dialog contains HSV parameters related to both the yellow and white lanes.
+  
 >**_Note_:** Due to the fact that the physical environment interferes with the line detection process, line color filtering is difficult. The modified parameters will interact differently throughout the day (because of the luminance)  
 >**_HSV-HSL explanation_:**  
 >* Hue (H): means the color, each color has its own region of the value, [here](https://en.wikipedia.org/wiki/HSL_and_HSV) are information about the color regions.  
@@ -287,7 +288,7 @@ The commands below will perform the lane detection mission. You can continue fro
 export AUTO_DT_CALIB=action
 roslaunch turtlebot3_autorace_traffic_light_detect turtlebot3_autorace_detect_lane.launch
 ```
-> **_Note_:**The `AUTO_DT_CALIB` is also an environment variable that defines in which mode the `detect_lane` will be launched
+> **_Note_:**The `AUTO_DT_CALIB` is also an environment variable that defines in which mode the `detect_lane` will be launched.
 2. Execute the command that enables the velocity topic in the Turtlebot, called `/cmd_vel`.
 ```bash
 roslaunch turtlebot3_bringup turtlebot3_robot.launch
