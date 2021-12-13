@@ -336,3 +336,7 @@ This project was based on the [Autonomous Driving Tutorial by ROBOTIS](https://e
 2. OpenCV: Camera Calibration. From https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html
 3. camera_calibration - ROS Wiki. From http://wiki.ros.org/camera_calibration
 4. OpenCV: Basic concepts of the homography explained with code. From https://docs.opencv.org/4.x/d9/dab/tutorial_homography.html
+  
+## Students
+  * Manos Koutoulakis (manos.koutoulak@gmailcom)
+  * Manos Markodimitrakis (manos.mark@gmail.com)
