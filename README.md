@@ -338,5 +338,5 @@ This project was based on the [Autonomous Driving Tutorial by ROBOTIS](https://e
 4. OpenCV: Basic concepts of the homography explained with code. From https://docs.opencv.org/4.x/d9/dab/tutorial_homography.html
   
 ## Students
-  * Manos Koutoulakis (manos.koutoulak@gmailcom)
+  * Manos Koutoulakis (manos.koutoulak@gmail.com)
   * Manos Markodimitrakis (manos.mark@gmail.com)
